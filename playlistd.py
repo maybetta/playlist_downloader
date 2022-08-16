@@ -2,23 +2,10 @@ import yt_dlp
 from numpy import loadtxt, c_
 from numpy.random import rand
 from re import sub
-from os.path import expanduser, exists
+from os.path import exists
 from os import makedirs, rename
-
-
-HOME = expanduser("~").replace('\\','/')
-
-# path to playlist. Download from google sheets as "Tab separated values"
-PL_PATH = HOME + '/Desktop/music/playlist.tsv'
-
-# needs FFMPEG, preferably from https://github.com/yt-dlp/FFmpeg-Builds#ffmpeg-static-auto-builds
-FFMPEG_PATH = 'C:/Program Files/ffmpeg-ytdlp/bin/'
-
-# pauses for 10-60s after every download
-PAUSE_DL = True
-
-# mp3, m4a, flac, vorbis, aac, alac, opus, wav
-FORMAT = "mp3"
+from time import sleep
+from conf import *
 
 
 OUT_PATH = PL_PATH[:-4] + '/'
@@ -43,7 +30,11 @@ ids = []
 for u in urls:
     start=u.find("?v=")+3
     end=u.find("&", start)
-    ids.append(u[start:end])
+    if end == -1:
+        ids.append(u[start:])
+    else:
+        ids.append(u[start:end])
+
 
 unavailable = []
 noid = []
@@ -81,7 +72,7 @@ for id, url, filename in c_[ids, urls, filenames]:
 
             if PAUSE_DL:
                 t = 10+50*rand()
-                print('Waiting %fs' % t)
+                print('Waiting %.0fs' % t)
                 sleep(t)
 
         except yt_dlp.utils.DownloadError:
