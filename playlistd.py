@@ -16,8 +16,8 @@ print("Downloading playlist in %s" % OUT_PATH)
 
 pl = loadtxt(PL_PATH, delimiter='\t', dtype='str', encoding='utf-8')
 urls = list(pl[1:,3])
-authors = pl[1:,0]
-titles = pl[1:,1]
+titles = pl[1:,0]
+authors = pl[1:,1]
 years = pl[1:,2]
 
 illegal_chars= "[/<>:\"|?*\\\]"
