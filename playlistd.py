@@ -89,14 +89,14 @@ for id, url, filename in c_[ids, urls, filenames]:
 
         except yt_dlp.utils.DownloadError:
             print('Video unavailable, skipping')
-            unavailable.append(url)
+            unavailable.append([filename[:-len(FORMAT)], url])
             continue
 
 
 if len(unavailable) > 0:
     print('\nThese videos are unavailable:')
-    for url in unavailable:
-        print(url)
+    for fn, url in unavailable:
+        print(fn + " " + url)
 
 if len(noid) > 0:
     print('\nThese videos have weird links:')
