@@ -61,11 +61,22 @@ for id, url, filename in c_[ids, urls, filenames]:
                 continue
 
             print('Attempting to download %s in temp file %s' % (url, dlfile))
-            error_code = ydl.download(url)
+            try:
+                error_code = ydl.download(url)
+            except PermissionError:
+                # let file locks get released, then try again
+                print('Downloaded file is locked, retrying')
+                sleep(5)
+                try:
+                    error_code = ydl.download(url)
+                except PermissionError:
+                    print('Can\'t convert to requested format, leaving m4a unchanged')
+                    dlfile = dlfile[:-len(FORMAT)] + ".temp.m4a"
+                    outfile = outfile[:-len(FORMAT)] + ".m4a"
 
             if exists(dlfile):
-                sleep(1) # let ytdlp finish
                 rename(dlfile, outfile)
+
                 print('Saved as %s' % (outfile))
             else:
                 print('Video has unrecognized id, leaving filename unchanged')
