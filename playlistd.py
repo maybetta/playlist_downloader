@@ -64,6 +64,7 @@ for id, url, filename in c_[ids, urls, filenames]:
             error_code = ydl.download(url)
 
             if exists(dlfile):
+                sleep(1) # let ytdlp finish
                 rename(dlfile, outfile)
                 print('Saved as %s' % (outfile))
             else:
